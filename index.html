@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Dual Datepicker</title>
+
+	<link rel="stylesheet" href="assets/styles/styles.css" />
+	<link rel="stylesheet" href="assets/styles/jquery-ui.css" />
+	<style>
+		input.datepicker {
+			background: #fff url('assets/images/icon-calendar.png') no-repeat calc(100% - 2px) center;
+		}
+		#ui-datepicker-div * {
+			box-sizing: content-box;
+		}
+	</style>
+
+	<!--[if IE 9]><script src="_ui/js/shims/classList.js"></script><![endif]-->
+	<script src="assets/scripts/vendor/modernizr.custom.min.js"></script>
+	<script src="assets/scripts/vendor/jquery.min.js"></script>
+	<script src="assets/scripts/vendor/jquery-ui.min.js"></script>
+	<script src="assets/scripts/classes/dual-datepicker.js"></script>
+
+	<script>
+		$(function() {
+			var $el = $('#dualdatepicker');
+			new DualDatepicker($el, {
+				startDatepickerID: 'uxStartDate',
+				endDatepickerID: 'uxEndDate',
+				bindStartDateToEndDate: false
+			});
+		});
+	</script>
+
+</head>
+<body>
+
+	<div id="content">
+
+		<h1>Dual Datepicker</h1>
+
+		<fieldset id="dualdatepicker" class="text-fields">
+			<ol>
+				<li>
+					<label for="uxStartDate" class="block">Start Date</label>
+					<input type="text" id="uxStartDate" name="uxStartDate" class="datepicker" />
+				</li>
+				<li>
+					<label for="uxEndDate" class="block">Start Date</label>
+					<input type="text" id="uxEndDate" name="uxEndDate" class="datepicker" />
+				</li>
+			</ol>
+		</fieldset>
+
+	</div>
+
+</body>
+</html>

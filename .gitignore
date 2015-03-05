@@ -1,0 +1,16 @@
+# Numerous always-ignore extensions
+*.sass-cache
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+
+# NPM packages folder.
+node_modules/
+
+# Bower packages folder.
+bower_components/
+
+# Build folders.
+local/
+public/
