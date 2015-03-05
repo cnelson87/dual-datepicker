@@ -16,20 +16,40 @@ var DualDatepicker = function($el, objOptions) {
 	this.$startDatepicker = this.$el.find('#' + this.options.startDatepickerID);
 	this.$endDatepicker = this.$el.find('#' + this.options.endDatepickerID);
 
-	this.initDOM();
+	this.initialize();
 
 };
 
 DualDatepicker.prototype = {
 
-/**
-*	Private Methods
-**/
-
-	initDOM: function() {
+	initialize: function() {
 		var self = this;
 		var $startDatepicker = this.$startDatepicker;
 		var $endDatepicker = this.$endDatepicker;
+
+		var beforeShowDay = function(date) {
+			var start = $startDatepicker.datepicker('getDate');
+			var end = $endDatepicker.datepicker('getDate');
+			var dpStart = Date.parse(start) / 1000;
+			var dpEnd = Date.parse(end) / 1000;
+			var dpDate = Date.parse(date) / 1000;
+			var inputID = $(this).attr('id');
+
+			if ( dpDate >= dpStart && dpDate <= dpEnd ) {
+				return [true, 'ui-state-active', ''];
+			} else {
+				return [true, '', ''];
+			}
+		};
+
+		var onSelect = function(date) {
+			var start = $startDatepicker.datepicker('getDate');
+			var end = $endDatepicker.datepicker('getDate');
+			var startMo = (new Date(start)).getMonth();
+			var endMo = (new Date(end)).getMonth();
+			var position = (startMo === endMo) ? 0 : 1;
+			$endDatepicker.datepicker('option', 'showCurrentAtPos', position);
+		};
 
 		this.$startDatepicker.datepicker({
 			minDate: 0,
@@ -37,29 +57,9 @@ DualDatepicker.prototype = {
 			defaultDate: '0',
 			numberOfMonths: 2,
 			showCurrentAtPos: 0,
-
-			// 'Paint' td cells with active class
-			beforeShowDay: function(date) {
-				var start = $startDatepicker.val();
-				var end = $endDatepicker.val();
-				var inputID = $(this).attr('id');
-
-				if ( Date.parse(date) < Date.parse(start) && inputID !== self.startID ) {
-					return [false, '', ''];
-				}
-				else if ( Date.parse(date) >= Date.parse(start) && Date.parse(date) <= Date.parse(end) ) {
-					return [true, 'ui-state-active', ''];
-				} else {
-					return [true, '', ''];
-				}
-			},
-			onSelect: function(date) {
-				var start = $startDatepicker.datepicker('getDate');
-				var end = $endDatepicker.datepicker('getDate');
-				var startMo = (new Date(start)).getMonth();
-				var endMo = (new Date(end)).getMonth();
-				var position = (startMo === endMo) ? 0 : 1;
-				$endDatepicker.datepicker('option', 'showCurrentAtPos', position);
+			beforeShowDay: beforeShowDay,
+			onSelect: onSelect,
+			onClose: function(date) {
 				$endDatepicker.datepicker('option', 'minDate', date);
 			}
 		});
@@ -70,29 +70,9 @@ DualDatepicker.prototype = {
 			defaultDate: '+1d',
 			numberOfMonths: 2,
 			showCurrentAtPos: 0,
-
-			// 'Paint' td cells with active class
-			beforeShowDay: function(date) {
-				var start = $startDatepicker.val();
-				var end = $endDatepicker.val();
-				var inputID = $(this).attr('id');
-
-				if ( Date.parse(date) < Date.parse(start) && inputID !== self.startID ) {
-					return [false, '', ''];
-				}
-				else if ( Date.parse(date) >= Date.parse(start) && Date.parse(date) <= Date.parse(end) ) {
-					return [true, 'ui-state-active', ''];
-				} else {
-					return [true, '', ''];
-				}
-			},
-			onSelect: function(date) {
-				var start = $startDatepicker.datepicker('getDate');
-				var end = $endDatepicker.datepicker('getDate');
-				var startMo = (new Date(start)).getMonth();
-				var endMo = (new Date(end)).getMonth();
-				var position = (startMo === endMo) ? 0 : 1;
-				$endDatepicker.datepicker('option', 'showCurrentAtPos', position);
+			beforeShowDay: beforeShowDay,
+			onSelect: onSelect,
+			onClose: function(date) {
 				if (self.bindStartDate) {
 					$startDatepicker.datepicker('option', 'maxDate', date);
 				}
@@ -103,13 +83,10 @@ DualDatepicker.prototype = {
 		this.$startDatepicker.datepicker('setDate', '0');
 		this.$endDatepicker.datepicker('setDate', '+1d');
 
-		this.bindEvents();
-
-	},
-
-	bindEvents: function() {
-		var self = this;
-
+		// blurring on focus to:
+		// 1. Prevent visible blinking cursor through calendar on iOS.
+		// 2. Remove "done" form control on iOS.
+		// Note: this affects accessibility though, everything may change later
 		this.$startDatepicker.on('focus', function() {
 			self.$startDatepicker.blur();
 		});
@@ -117,38 +94,6 @@ DualDatepicker.prototype = {
 			self.$endDatepicker.blur();
 		});
 
-	},
-
-
-/**
-*	Event Handlers
-**/
-
-	__onActive: function(e) {
-
-	},
-
-	__onInactive: function(e) {
-
-	},
-
-	__onClick: function(e) {
-
-	},
-
-
-/**
-*	Public API
-**/
-
-	updateUI: function() {
-
-
-	},
-
-	render: function() {
-
-		return this.$el;
 	}
 
 };
