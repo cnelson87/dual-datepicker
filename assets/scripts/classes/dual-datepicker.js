@@ -6,7 +6,8 @@ var DualDatepicker = function($el, objOptions) {
 	this.options = $.extend({
 		startDatepickerID: 'startDate',
 		endDatepickerID: 'endDate',
-		bindStartDateToEndDate: true
+		bindStartDateToEndDate: true,
+		customEventName: 'DualDatepicker'
 	}, objOptions || {});
 
 	this.startID = this.options.startDatepickerID;
